@@ -1,0 +1,18 @@
+FROM python:3.10
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+RUN useradd -m myuser
+USER myuser
+WORKDIR /home/myuser/app
+
+COPY server/requirements.txt /tmp/requirements.txt
+COPY server/requirements-dev.txt /tmp/requirements-dev.txt
+COPY --chown=myuser:myuser server/src/ ./
+RUN pip install --no-warn-script-location --no-cache-dir -r /tmp/requirements.txt
+RUN pip install --no-warn-script-location --no-cache-dir -r /tmp/requirements-dev.txt
+
+ENV PATH="/home/myuser/.local/bin:${PATH}"
+
+USER myuser

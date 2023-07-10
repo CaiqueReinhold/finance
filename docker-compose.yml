@@ -1,0 +1,105 @@
+version: "2"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    command: uvicorn app:app --reload --host 0.0.0.0
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./server:/home/myuser/app"
+    working_dir: /home/myuser/app/src
+    networks:
+      - dev
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=finance
+      - RUN_MIGRATIONS=True
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    command: python -m aipo --app worker:app --loop uvloop
+    volumes:
+      - "./server:/home/myuser/app"
+    working_dir: /home/myuser/app/src
+    networks:
+      - dev
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=finance
+  frontend:
+    image: node:18.7.0-slim
+    command: npm run start
+    working_dir: /home/node/app
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./frontend:/home/node/app"
+    networks:
+      - dev
+    environment:
+      - REACT_APP_DOMAIN=http://localhost:8080
+  proxy:
+    image: nginx:stable-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - "./proxy:/etc/nginx/conf.d"
+    networks:
+      - dev
+    depends_on:
+      - frontend
+      - web
+  redis:
+    image: redis:alpine
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - "redis_data:/data"
+      - './redis/redis.conf:/usr/local/etc/redis/redis.conf'
+    networks:
+      - dev
+  postgres:
+    image: postgres:14.4-alpine
+    networks:
+      - dev
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=finance
+    volumes:
+      - "postgres_data:/var/lib/postgresql/data"
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+    networks:
+      - dev
+
+networks:
+  dev:
+    driver: bridge
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local

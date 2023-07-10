@@ -1,0 +1,51 @@
+-- upgrade --
+CREATE TABLE IF NOT EXISTS "account" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "name" VARCHAR(255) NOT NULL,
+    "email" VARCHAR(255) NOT NULL UNIQUE,
+    "password_hash" VARCHAR(255) NOT NULL,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "valid_email" BOOL NOT NULL DEFAULT False
+);
+
+CREATE TABLE IF NOT EXISTS "email_validation_code" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "request_code" VARCHAR(255) NOT NULL,
+    "account_id" INT NOT NULL REFERENCES "account" ("id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "session" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "last_used" TIMESTAMPTZ,
+    "token" VARCHAR(255) NOT NULL,
+    "user_agent" VARCHAR(500) NOT NULL,
+    "ip" VARCHAR(255) NOT NULL,
+    "account_id" INT NOT NULL REFERENCES "account" ("id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "category" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "name" VARCHAR(255) NOT NULL,
+    "color" VARCHAR(7) NOT NULL,
+    "account_id" INT NOT NULL REFERENCES "account" ("id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "transaction" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "created_at" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "amount" DECIMAL(10, 2) NOT NULL,
+    "description" VARCHAR(255) NOT NULL,
+    "type" VARCHAR(255) NOT NULL,
+    "account_id" INT NOT NULL REFERENCES "account" ("id") ON DELETE CASCADE,
+    "category_id" INT NOT NULL REFERENCES "category" ("id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS "aerich" (
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "version" VARCHAR(255) NOT NULL,
+    "app" VARCHAR(100) NOT NULL,
+    "content" JSONB NOT NULL
+);
