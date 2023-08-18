@@ -3,28 +3,48 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchTransactions } from '../actions/transactions';
+import { fetchCategories } from '../actions/categories';
 
 import Input from '../components/Input';
 import IconButton from '../components/IconButton';
 import { Add } from '../components/Icons';
 import Modal from '../components/Modal';
 import Title from '../components/Title';
+import Button from '../components/Button';
+import { Select } from '../components/Select';
 
-const TransactionForm = ({ title, actionName }) => {
+const TransactionForm = ({ title, actionName, onAction, onCancel }) => {
+  const categories = useSelector((state) => state.categories.categories);
   return (
     <div>
       <Title>{title}</Title>
-      <div className="flex justify-between">
-        <Input
-          className="w-full"
-          type="text"
-          label="Description"
-          name="description"
-        />
-        <Input type="number" label="Amount" name="amount" />
-        <Input type="date" label="Date" name="date" />
-        <Input type="text" label="Category" name="category" />
-      </div>
+      <form onSubmit={onAction ? onAction : () => {}}>
+        <div className="flex flex-wrap space-y-5 justify-between">
+          <Input
+            className="w-full"
+            type="text"
+            label="Description"
+            name="description"
+          />
+          <Input type="number" label="Amount" name="amount" />
+          <Input type="date" label="Date" name="date" />
+          <Select
+            label="Category"
+            name="category"
+            items={categories.map((c) => ({
+              value: c.id,
+              description: c.name,
+            }))}
+            onValueChanged={(v) => console.log(v)}
+          />
+          <div className="w-full flex justify-between">
+            <Button onClick={onCancel} variant="secondary">
+              Cancel
+            </Button>
+            <Button type="submit">{actionName}</Button>
+          </div>
+        </div>
+      </form>
     </div>
   );
 };
@@ -37,6 +57,10 @@ export function Transactions() {
   const page = useSelector((state) => state.transactions.page);
 
   useEffect(() => {
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  useEffect(() => {
     dispatch(fetchTransactions({ page }));
   }, [dispatch, page]);
 
@@ -47,7 +71,12 @@ export function Transactions() {
           setModal(null);
         }}
       >
-        <TransactionForm title="Add transaction" actionName="Add" />
+        <TransactionForm
+          title="Add transaction"
+          actionName="Add"
+          onCancel={() => setModal(null)}
+          onAction={() => null}
+        />
       </Modal>
     );
   };
