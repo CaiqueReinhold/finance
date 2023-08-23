@@ -3,9 +3,10 @@ from decimal import Decimal
 from typing import List, Tuple
 
 from fastapi import HTTPException
+from tortoise.expressions import Q
 
 from account.models import Account
-from category.models import Category
+from category.services import get_category
 from config import DEFAULT_PAGE_SIZE
 
 from .models import Transaction
@@ -17,7 +18,7 @@ async def create_transaction(
     amount: Decimal,
     date: date,
     type: str,
-    category: Category,
+    category_id: int,
 ) -> Transaction:
     transaction = await Transaction.create(
         account=account,
@@ -25,7 +26,7 @@ async def create_transaction(
         amount=amount,
         date=date,
         type=type,
-        category=category,
+        category=await get_category(account=account, category_id=category_id),
     )
     return transaction
 
@@ -38,7 +39,7 @@ async def get_transactions(
     since: date = None,
     until: date = None,
     category_id: int = None,
-    description: str = None,
+    q: str = None,
 ) -> Tuple[List[Transaction], int]:
     transactions = Transaction.filter(account=account)
 
@@ -48,8 +49,17 @@ async def get_transactions(
         transactions = transactions.filter(date__lte=until)
     if category_id:
         transactions = transactions.filter(category_id=category_id)
-    if description:
-        transactions = transactions.filter(description__icontains=description)
+    if q and q.startswith(">") or q.startswith("<"):
+        amt = float(q[1:])
+        transactions = (
+            transactions.filter(amount__gte=amt)
+            if q.startswith(">")
+            else transactions.filter(amount__lte=amt)
+        )
+    elif q:
+        transactions = transactions.filter(
+            Q(description__icontains=q) | Q(category__name__icontains=q)
+        )
 
     total = await transactions.count()
 
@@ -78,7 +88,7 @@ async def update_transaction(
     amount: Decimal = None,
     date: date = None,
     type: str = None,
-    category: Category = None,
+    category_id: int = None,
 ) -> Transaction:
     if description:
         transaction.description = description
@@ -92,8 +102,10 @@ async def update_transaction(
     if type:
         transaction.type = type
 
-    if category:
-        transaction.category = category
+    if category_id:
+        transaction.category = await get_category(
+            account=await transaction.account, category_id=category_id
+        )
 
     await transaction.save()
     return transaction

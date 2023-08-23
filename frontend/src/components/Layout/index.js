@@ -16,7 +16,6 @@ function Layout({ children }) {
   }, [showSideNav]);
 
   const onMenuClick = () => {
-    console.log('onMenuClick', showSideNav);
     setShowSideNav(!showSideNav);
   };
 

@@ -95,10 +95,6 @@ networks:
     driver: bridge
 
 volumes:
-  zookeeper_data:
-    driver: local
-  kafka_data:
-    driver: local
   postgres_data:
     driver: local
   redis_data:

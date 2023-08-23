@@ -5,6 +5,8 @@ function Input({
   name,
   label,
   value,
+  defaultValue,
+  step,
   placeholder,
   onChange,
   required = false,
@@ -30,6 +32,8 @@ function Input({
         onChange={onChange}
         required={required}
         autoFocus={autofocus}
+        step={step}
+        defaultValue={defaultValue}
       />
     </div>
   );

@@ -1,11 +1,13 @@
+from datetime import date
+
 from pydantic import BaseModel
 
 
 class Transaction(BaseModel):
     id: int
-    name: str
+    description: str
     amount: float
-    date: str
+    date: date
     category_id: int
 
     class Config:
@@ -13,10 +15,11 @@ class Transaction(BaseModel):
 
 
 class TransactionCreate(BaseModel):
-    name: str
+    description: str
     amount: float
     date: str
     category_id: int
+    type: str = "expense"
 
 
 class PageinatedTransaction(BaseModel):

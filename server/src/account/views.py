@@ -28,7 +28,7 @@ async def create_account(account: serializers.CreateAccountRequest):
     return serializers.Account.from_orm(await services.create_account(**account.dict()))
 
 
-@router.post("/validate", response_model=serializers.Account)
+@router.post("/validate/", response_model=serializers.Account)
 @atomic()
 async def validate_account(*, request: Request, response: Response, token: str):
     session, account = await services.validate_account(
@@ -40,7 +40,7 @@ async def validate_account(*, request: Request, response: Response, token: str):
     return serializers.Account.from_orm(account)
 
 
-@router.post("/reset-password", status_code=204)
+@router.post("/reset-password/", status_code=204)
 @atomic()
 async def reset_password(
     *, body: serializers.ResetPasswordRequest, session: Session = Depends(require_auth)
@@ -50,7 +50,7 @@ async def reset_password(
 
 
 @router.post(
-    "/login",
+    "/login/",
     response_model=serializers.Account,
     responses={
         401: {"model": ErrorResponse},
@@ -78,7 +78,7 @@ async def login(
     return serializers.Account.from_orm(account)
 
 
-@router.post("/logout", status_code=204)
+@router.post("/logout/", status_code=204)
 @atomic()
 async def logout(*, response: Response, session: Session = Depends(require_auth)):
     response.delete_cookie(config.SESSION_COOKIE_NAME)
@@ -86,7 +86,7 @@ async def logout(*, response: Response, session: Session = Depends(require_auth)
     return None
 
 
-@router.get("/me", response_model=serializers.Account)
+@router.get("/me/", response_model=serializers.Account)
 @atomic()
 async def get_account(*, session: Session = Depends(require_auth)):
     return serializers.Account.from_orm(session.account)

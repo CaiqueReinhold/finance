@@ -34,7 +34,7 @@ async def get_transactions(
     since: str = None,
     until: str = None,
     category_id: int = None,
-    description: str = None,
+    q: str = None,
 ):
     try:
         since = date.fromisoformat(since) if since else None
@@ -50,7 +50,7 @@ async def get_transactions(
         since=since,
         until=until,
         category_id=category_id,
-        description=description,
+        q=q,
     )
 
     return {
@@ -61,7 +61,7 @@ async def get_transactions(
     }
 
 
-@router.get("/{transaction_id}", response_model=serializers.Transaction)
+@router.get("/{transaction_id}/", response_model=serializers.Transaction)
 async def get_transaction(
     *, session: Session = Depends(require_auth), transaction_id: int
 ):
@@ -72,7 +72,7 @@ async def get_transaction(
     )
 
 
-@router.put("/{transaction_id}", response_model=serializers.Transaction)
+@router.put("/{transaction_id}/", response_model=serializers.Transaction)
 async def update_transaction(
     *,
     session: Session = Depends(require_auth),
@@ -88,7 +88,7 @@ async def update_transaction(
     return serializers.Transaction.from_orm(transaction)
 
 
-@router.delete("/{transaction_id}", status_code=204)
+@router.delete("/{transaction_id}/", status_code=204)
 async def delete_transaction(
     *, session: Session = Depends(require_auth), transaction_id: int
 ):

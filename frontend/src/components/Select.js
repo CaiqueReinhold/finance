@@ -5,6 +5,7 @@ export function Select({
   items,
   selectedValue,
   label,
+  name,
   onValueChanged,
 }) {
   const handleChange = (e) => {
@@ -22,6 +23,7 @@ export function Select({
         </label>
       )}
       <select
+        name={name}
         value={selectedValue}
         className="block w-full rounded-md border
           border-gray-200 bg-gray-50 px-3 py-2 text-gray-900"

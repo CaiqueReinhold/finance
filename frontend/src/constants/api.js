@@ -11,4 +11,10 @@ export const ENDPOINTS = {
     EDIT: (id) => `/category/${id}/`,
     DELETE: (id) => `/category/${id}/`,
   },
+  TRANSACTIONS: {
+    LIST: '/transaction/',
+    CREATE: '/transaction/',
+    EDIT: (id) => `/transaction/${id}/`,
+    DELETE: (id) => `/transaction/${id}/`,
+  },
 };

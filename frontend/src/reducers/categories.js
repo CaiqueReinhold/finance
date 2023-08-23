@@ -1,5 +1,5 @@
 const initialState = {
-  categories: null,
+  categories: [],
   showLoader: false,
   error: null,
   created: false,
@@ -14,7 +14,6 @@ const categoryReducer = (state = initialState, action) => {
         created: false,
       };
     case 'CATEGORIES_CREATE_SUCCESS':
-      console.log([...state.categories, action.category]);
       return {
         ...state,
         error: null,

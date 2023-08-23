@@ -4,14 +4,19 @@ const CLASSES = {
   success: 'bg-green-500',
   info: 'bg-blue-500',
   error: 'bg-red-500',
+  right: 'bottom-5 right-5',
+  left: 'bottom-5 left-5',
+  center: 'bottom-5 left-1/2 transform -translate-x-1/2',
 };
 
-export function Toast({ message, type = 'success', onClose = () => {} }) {
+export function Toast({ message, type = 'success', align = 'left' }) {
   return (
     <div
       className={
-        'p-3 text-white fixed bottom-5 right-5 flex rounded-md shadow-lg ' +
-        CLASSES[type]
+        'p-3 text-white fixed flex rounded-md shadow-lg ' +
+        CLASSES[type] +
+        ' ' +
+        CLASSES[align]
       }
     >
       <span className="mr-3">

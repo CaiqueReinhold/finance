@@ -6,8 +6,7 @@ const ERROR_MESSAGES = {
   EMAIL_IN_USE: 'Email is already in use',
   PASSWORD_INVALID:
     'Password must be at least 8 characters long, contain at ' +
-    'least one number, one uppercase, one lowercase letter and must not ' +
-    'exceed 32 characters',
+    'least one number, one uppercase and one lowercase letter',
   PASSWORD_MISMATCH: 'Passwords do not match',
   NAME_INVALID: 'Name must be at least 3 characters long',
   EMAIL_INVALID: 'Email is invalid',
