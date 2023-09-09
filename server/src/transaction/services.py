@@ -49,7 +49,7 @@ async def get_transactions(
         transactions = transactions.filter(date__lte=until)
     if category_id:
         transactions = transactions.filter(category_id=category_id)
-    if q and q.startswith(">") or q.startswith("<"):
+    if q and (q.startswith(">") or q.startswith("<")):
         amt = float(q[1:])
         transactions = (
             transactions.filter(amount__gte=amt)

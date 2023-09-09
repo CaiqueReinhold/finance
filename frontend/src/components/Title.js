@@ -1,6 +1,10 @@
-function Title({ children }) {
+import clsx from 'clsx';
+
+function Title({ className, children }) {
   return (
-    <h1 className="mt-6 text-center text-2xl font-extrabold text-slate-700">
+    <h1
+      className={clsx('mt-6 text-2xl font-extrabold text-slate-700', className)}
+    >
       {children}
     </h1>
   );

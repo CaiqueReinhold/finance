@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../../hooks/session';
 
 import Header from './Header';
 import SideNav from './SideNav';
@@ -7,6 +8,13 @@ function Layout({ children }) {
   const [showSideNav, setShowSideNav] = useState(
     sessionStorage.getItem('showSideNav') === 'true'
   );
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (auth === false) {
+      setShowSideNav(false);
+    }
+  }, [auth]);
 
   useEffect(() => {
     sessionStorage.setItem(

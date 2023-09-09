@@ -44,7 +44,7 @@ function SignUp() {
     <div className="flex items-center justify-center">
       <div className="max-w-md w-full space-y-10">
         <div>
-          <Title>Create an account</Title>
+          <Title className="text-center">Create an account</Title>
           <p className="text-center mt-2">
             Already have an account?{' '}
             <Link to={routes.SIGN_IN.path}>Sign in to your account</Link>.

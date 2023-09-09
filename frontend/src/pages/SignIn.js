@@ -55,7 +55,7 @@ function SignIn() {
     <div className="flex items-center justify-center">
       <div className="max-w-md w-full space-y-10">
         <div>
-          <Title>Sign in to your account</Title>
+          <Title className="text-center">Sign in to your account</Title>
           <p className="text-center mt-2">
             Don't have an account yet?{' '}
             <Link to={routes.SIGN_UP.path}>Create an account</Link>.

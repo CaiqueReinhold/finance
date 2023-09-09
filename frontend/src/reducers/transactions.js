@@ -27,6 +27,9 @@ const transationsReducer = (state = initialState, action) => {
         ...state,
         error: null,
         showLoader: true,
+        created: false,
+        edited: false,
+        deleted: false,
       };
     case 'TRANSACTIONS_FETCH_SUCCESS':
       return {

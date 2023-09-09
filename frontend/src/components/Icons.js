@@ -93,3 +93,51 @@ export function Success(height = 24, width = 24, color = '#000000') {
     </svg>
   );
 }
+
+export function Import(height = 24, width = 24, color = '#000000') {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      height={height.toString()}
+      width={width.toString()}
+    >
+      <path
+        fill={color}
+        d="M450-313v-371L330-564l-43-43 193-193 193 193-43 43-120-120v371h-60ZM220-160q-24 0-42-18t-18-42v-143h60v143h520v-143h60v143q0 24-18 42t-42 18H220Z"
+      />
+    </svg>
+  );
+}
+
+export function TrendUp(height = 24, width = 24, color = '#000000') {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      height={height.toString()}
+      width={width.toString()}
+    >
+      <path
+        fill={color}
+        d="m123-240-43-43 292-291 167 167 241-241H653v-60h227v227h-59v-123L538-321 371-488 123-240Z"
+      />
+    </svg>
+  );
+}
+
+export function TrendDown(height = 24, width = 24, color = '#000000') {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 -960 960 960"
+      height={height.toString()}
+      width={width.toString()}
+    >
+      <path
+        fill={color}
+        d="M653-240v-60h127L539-541 372-374 80-665l43-43 248 248 167-167 283 283v-123h59v227H653Z"
+      />
+    </svg>
+  );
+}
